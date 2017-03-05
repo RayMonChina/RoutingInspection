@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="#1ba9ba" >
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/selector_bt_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工作"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:scrollbars="vertical" >
+
+            <LinearLayout
+                style="@style/LinearLayoutStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="类型" />
+
+                    <Spinner
+                        android:id="@+id/spiEleLevel"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:saveEnabled="true" />
+
+                    <Spinner
+                        android:id="@+id/spiWorkType"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/etWorkNum"
+                        style="@style/my_edittext_style"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:inputType="number"
+                        android:paddingLeft="80.0dip"
+                        android:saveEnabled="true"
+                        android:enabled="false" 
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/etWorkNum"
+                        android:layout_alignLeft="@id/etWorkNum"
+                        android:layout_alignTop="@id/etWorkNum"
+                        android:gravity="center"
+                        android:paddingLeft="7.0dip"
+                        android:text="编号：" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/etworkname"
+                        style="@style/my_edittext_style"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="90.0dip"
+                        android:saveEnabled="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/etworkname"
+                        android:layout_alignLeft="@id/etworkname"
+                        android:layout_alignTop="@id/etworkname"
+                        android:gravity="center"
+                        android:paddingLeft="7.0dip"
+                        android:text="内容:" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" >
+
+                        <EditText
+                            android:id="@+id/etWorkPerson1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:hint=""
+                            android:paddingLeft="90.0dip"
+                            android:saveEnabled="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/etWorkPerson1"
+                            android:layout_alignLeft="@id/etWorkPerson1"
+                            android:layout_alignTop="@id/etWorkPerson1"
+                            android:gravity="center"
+                            android:paddingLeft="7.0dip"
+                            android:text="配合人1:" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0" 
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/etWorkPerson2"
+                            style="@style/my_edittext_style"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:paddingLeft="90.0dip"
+                            android:saveEnabled="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/etWorkPerson2"
+                            android:layout_alignLeft="@id/etWorkPerson2"
+                            android:layout_alignTop="@id/etWorkPerson2"
+                            android:gravity="center"
+                            android:paddingLeft="7.0dip"
+                            android:text="配合人2:" />
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="环节：" />
+
+                    <Spinner
+                        android:id="@+id/spiner_step"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMoreinfo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="right"
+                    android:paddingLeft="7.0dip"
+                    android:text="" />
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/etworkRemark"
+                        style="@style/my_edittext_style"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:paddingLeft="50.0dip"
+                        android:saveEnabled="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/etworkRemark"
+                        android:layout_alignLeft="@id/etworkRemark"
+                        android:layout_alignTop="@id/etworkRemark"
+                        android:gravity="center"
+                        android:paddingLeft="7.0dip"
+                        android:text="备注" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:visibility="gone" >
+
+                    <Spinner
+                        android:id="@+id/spiPicChoice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="90.0dip"
+                        android:scrollbarStyle="insideOverlay" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/spiPicChoice"
+                        android:layout_alignLeft="@id/spiPicChoice"
+                        android:layout_alignTop="@id/spiPicChoice"
+                        android:gravity="center"
+                        android:paddingLeft="7.0dip"
+                        android:text="分辨率" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <include layout="@layout/r_workorderadd_popumenu" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/btn_upload"
+                style="@style/button"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:src="@drawable/selector_r_upload" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
