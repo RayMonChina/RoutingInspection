@@ -20,6 +20,7 @@ import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -37,7 +38,9 @@ import com.ideal.zsyy.response.RBaseRes;
 import com.ideal.zsyy.response.RworkItemRes;
 import com.ideal.zsyy.service.PreferencesService;
 import com.ideal.zsyy.utils.DialogCirleProgress;
+import com.ideal.zsyy.utils.FileUtils;
 import com.ideal.zsyy.utils.HttpUtil;
+import com.ideal.zsyy.utils.UtilNetWork;
 import com.ideal.zsyy.view.LeftFragment;
 import com.ideal.zsyy.view.PullToRefreshLayout;
 import com.ideal.zsyy.view.PullToRefreshLayout.OnRefreshListener;
@@ -665,5 +668,51 @@ public class RSlidMainActivity extends SlidingFragmentActivity implements Uncaug
 		});
 	}///
 	// ================
+	
+	private void checkUnUPloadWord()
+	{
+		int unWorkCount=dbManager.unLoadWorkCount(userId);
+		int unMediaCount=dbManager.unLoadMediaCount(userId);
+		if(unMediaCount<=0&&unWorkCount<=0)
+		{
+			return;
+		}
+		if(!HttpUtil.checkNet(RSlidMainActivity.this))
+		{
+			return;
+		}
+		String tipMsg="";
+		if(unWorkCount>0)
+		{
+			tipMsg="未上传工作"+unWorkCount+"项\n";
+		}
+		if(unMediaCount>0)
+		{
+			tipMsg+="未上传文件"+unMediaCount+"个";
+		}
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				RSlidMainActivity.this);
+		builder.setTitle(tipMsg);
+		builder.setPositiveButton("上传",
+				new DialogInterface.OnClickListener() {
 
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						
+					}
+				});
+		builder.setNegativeButton("取消",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog,
+							int which) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+		builder.show();
+	}
 }

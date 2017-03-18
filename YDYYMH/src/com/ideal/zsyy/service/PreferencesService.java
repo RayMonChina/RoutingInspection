@@ -29,6 +29,15 @@ public class PreferencesService {
 		editor.putBoolean("isLogin", false);
 		editor.commit();
 	}
+	
+	public void saveLogin() {
+		SharedPreferences preferences = context.getSharedPreferences(SPF,
+				Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+
+		editor.putBoolean("isLogin", true);
+		editor.commit();
+	}
 
 	public boolean getIsLogin() {
 		

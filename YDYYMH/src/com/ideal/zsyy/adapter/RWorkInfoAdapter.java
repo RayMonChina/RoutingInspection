@@ -3,8 +3,11 @@ package com.ideal.zsyy.adapter;
 import java.io.File;
 import java.util.List;
 
+import com.baidu.mapapi.map.Text;
 import com.ideal.zsyy.Config;
+import com.ideal.zsyy.activity.RPosition;
 import com.ideal.zsyy.entity.RImageTagInfo;
+import com.ideal.zsyy.entity.RLocationInfo;
 import com.ideal.zsyy.entity.RWorkMediaInfo;
 import com.ideal.zsyy.utils.DialogCirleProgress;
 import com.ideal.zsyy.utils.FileUtils;
@@ -85,12 +88,19 @@ public class RWorkInfoAdapter extends BaseAdapter {
 			TextView tv_work_info_step = (TextView) layout.findViewById(R.id.tv_work_info_step);// 时间
 			ImageView img_work_info = (ImageView) layout.findViewById(R.id.img_work_info);// 用户编码
 			TextView tv_location_info = (TextView) layout.findViewById(R.id.tv_location_info);// 单位
+			TextView tv_position=(TextView)layout.findViewById(R.id.btn_position);
+			
+			RLocationInfo locationInfo=new RLocationInfo();
+			locationInfo.setLat(mediaInfo.getLat());
+			locationInfo.setLon(mediaInfo.getLon());
+			tv_position.setTag(locationInfo);
 
 			viewHolder = new ViewHolder();
 			viewHolder.setImg_work_info(img_work_info);
 			viewHolder.setTv_location_info(tv_location_info);
 			viewHolder.setTv_work_info_date(tv_work_info_date);
 			viewHolder.setTv_work_info_step(tv_work_info_step);
+			viewHolder.setBtn_position(tv_position);
 			convertView = layout;
 			convertView.setTag(viewHolder);
 		}
@@ -128,6 +138,25 @@ public class RWorkInfoAdapter extends BaseAdapter {
 		viewHolder.getTv_location_info().setText(mediaInfo.getGpsaddress());
 		viewHolder.getTv_work_info_date().setText(mediaInfo.getCreatetime());
 		viewHolder.getTv_work_info_step().setText(mediaInfo.getGjdmc());
+		
+		viewHolder.getBtn_position().setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RLocationInfo locationInfo=(RLocationInfo)v.getTag();
+				if(locationInfo==null)
+				{
+					Toast.makeText(_context,"定位失败", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					Intent intent_posion=new Intent(_context,RPosition.class);
+					intent_posion.putExtra("lat", locationInfo.getLat());
+					intent_posion.putExtra("lon",locationInfo.getLon());
+					_context.startActivity(intent_posion);
+				}
+			}
+		});
 		
 		viewHolder.getImg_work_info().setOnClickListener(new OnClickListener() {
 			
@@ -265,6 +294,7 @@ public class RWorkInfoAdapter extends BaseAdapter {
 		private TextView tv_work_info_step;// 步骤
 		private ImageView img_work_info;// media
 		private TextView tv_location_info;// 位置信息
+		private TextView btn_position;//定位
 
 		public TextView getTv_work_info_date() {
 			return tv_work_info_date;
@@ -297,6 +327,15 @@ public class RWorkInfoAdapter extends BaseAdapter {
 		public void setTv_location_info(TextView tv_location_info) {
 			this.tv_location_info = tv_location_info;
 		}
+
+		public TextView getBtn_position() {
+			return btn_position;
+		}
+
+		public void setBtn_position(TextView btn_position) {
+			this.btn_position = btn_position;
+		}
+		
 	}
 
 }

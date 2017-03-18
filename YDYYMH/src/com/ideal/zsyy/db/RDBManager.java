@@ -362,7 +362,6 @@ public class RDBManager {
 		fileMap.setId(mediaInfo.getId());
 		fileMap.setLocalFilePath(mediaInfo.getLocalFilePath());
 		AddFileMapping(fileMap);
-		AddFileMapping(fileMap);
 	}
 
 	//

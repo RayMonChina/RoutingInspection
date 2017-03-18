@@ -554,13 +554,18 @@ public class RWorkOrderActivity extends Activity {
 	{
 		initWorkData();
 		if (workItemInfo != null) {
-			if (workItemInfo.getAlreadyUpload() == 0)
+			if (workItemInfo.getAlreadyUpload() == 0&&dbManager.getWorkItemBytaskNum(workItemInfo.getTicketnum())==null)
 				dbManager.AddWorkItem(workItemInfo);
 			else
 				dbManager.updateWorkInfo(workItemInfo);
 		}
 		if (workItemInfo.getTaskname() == null || workItemInfo.getTaskname().trim().equals("")) {
 			Toast.makeText(RWorkOrderActivity.this, "请输入任务内容", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if(!HttpUtil.checkNet(RWorkOrderActivity.this))
+		{
+			Toast.makeText(RWorkOrderActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final DialogCirleProgress dCirleProgress = new DialogCirleProgress(RWorkOrderActivity.this);
@@ -809,7 +814,10 @@ public class RWorkOrderActivity extends Activity {
 					public void onError(Call arg0, Exception arg1, int arg2) {
 						// TODO Auto-generated method stub
 						// dCirleProgress.hideProcessDialog();
-						Toast.makeText(RWorkOrderActivity.this, "上传失败," + arg1.getMessage(), Toast.LENGTH_SHORT).show();
+						//Toast.makeText(RWorkOrderActivity.this, "上传失败," + arg1.getMessage(), Toast.LENGTH_SHORT).show();
+						workItemInfo.setRecordcount(workItemInfo.getRecordcount() + 1);
+						dbManager.updateWorkInfo(workItemInfo);
+						handler.sendEmptyMessage(6);
 					}
 
 					@Override

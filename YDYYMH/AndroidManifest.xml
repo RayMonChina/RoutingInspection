@@ -475,6 +475,10 @@
             android:name="com.ideal.zsyy.activity.RWorkInfoDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name="com.ideal.zsyy.activity.RPosition"
+            android:screenOrientation="portrait">
+            
+        </activity>
         <!-- end -->
 
         <receiver

@@ -645,7 +645,8 @@ public class RMediaManageActivity extends Activity {
 	{
 		if(!HttpUtil.checkNet(RMediaManageActivity.this))
 		{
-			Toast.makeText(RMediaManageActivity.this,"请检查网络！",Toast.LENGTH_SHORT).show();
+			//Toast.makeText(RMediaManageActivity.this,"请检查网络！",Toast.LENGTH_SHORT).show();
+			handler.sendEmptyMessage(1);
 			return;
 		}
 		OkHttpUtils.get().url(Config.Apiurl)

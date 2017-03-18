@@ -33,19 +33,19 @@ public final class R {
 		public static final int tab_unselected = 0x7f020220;
 	}
 	public static final class id {
-		public static final int backArrowImageViewFromMediaChooserHeaderView = 0x7f090196;
-		public static final int checkTextViewFromMediaChooserGridItemRowView = 0x7f090193;
-		public static final int gridViewFromMediaChooser = 0x7f090194;
-		public static final int imageViewFromMediaChooserBucketRowView = 0x7f090190;
-		public static final int imageViewFromMediaChooserGridItemRowView = 0x7f090192;
-		public static final int lv_audio = 0x7f090198;
+		public static final int backArrowImageViewFromMediaChooserHeaderView = 0x7f090198;
+		public static final int checkTextViewFromMediaChooserGridItemRowView = 0x7f090195;
+		public static final int gridViewFromMediaChooser = 0x7f090196;
+		public static final int imageViewFromMediaChooserBucketRowView = 0x7f090192;
+		public static final int imageViewFromMediaChooserGridItemRowView = 0x7f090194;
+		public static final int lv_audio = 0x7f09019a;
 		public static final int meadiaChooserHeaderBar = 0x7f090005;
-		public static final int nameTextViewFromMediaChooserBucketRowView = 0x7f090191;
-		public static final int postToActionBarFromMediaChooser = 0x7f090195;
+		public static final int nameTextViewFromMediaChooserBucketRowView = 0x7f090193;
+		public static final int postToActionBarFromMediaChooser = 0x7f090197;
 		public static final int realTabcontent = 0x7f090006;
-		public static final int titleTextViewFromMediaChooserHeaderBar = 0x7f090197;
-		public static final int tv_audio_name = 0x7f090199;
-		public static final int tv_date = 0x7f09019a;
+		public static final int titleTextViewFromMediaChooserHeaderBar = 0x7f090199;
+		public static final int tv_audio_name = 0x7f09019b;
+		public static final int tv_date = 0x7f09019c;
 	}
 	public static final class layout {
 		public static final int activity_home_media_chooser = 0x7f030000;

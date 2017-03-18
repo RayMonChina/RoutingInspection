@@ -88,8 +88,20 @@ public class LoginActivity extends Activity {
 	{
 		if(!HttpUtil.checkNet(LoginActivity.this))
 		{
-			Toast.makeText(LoginActivity.this,"请检查网络！",Toast.LENGTH_SHORT).show();
-			return;
+			Map<String, Object>userInfo=preferencesService.getLoginInfo();
+			String userName=userInfo.get("loginName").toString();
+			String upwd=userInfo.get("pwd").toString();
+			if(userName.equals(uName)&&upwd.equals(pwd))
+			{
+				intent=new Intent(LoginActivity.this, RSlidMainActivity.class);
+				startActivity(intent);
+				finish();
+				return;
+			}
+			else {
+				Toast.makeText(LoginActivity.this,"用户名或密码错误，请联网后重试！",Toast.LENGTH_SHORT).show();
+				return;
+			}
 		}
 		final DialogCirleProgress dCirleProgress=new DialogCirleProgress(LoginActivity.this);
 		OkHttpUtils.get().url(Config.Apiurl)
