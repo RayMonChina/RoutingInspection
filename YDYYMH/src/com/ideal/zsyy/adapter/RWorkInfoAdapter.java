@@ -165,6 +165,10 @@ public class RWorkInfoAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				currImage=(ImageView)v;
 				RImageTagInfo imageInfo=(RImageTagInfo)v.getTag();
+				if(imageInfo==null)
+				{
+					return;
+				}
 				File fileImg=new File(imageInfo.getFilePath());
 				if(fileImg.exists())
 				{
@@ -280,7 +284,7 @@ public class RWorkInfoAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				Log.e("get file error",arg1.getMessage());
 				cirleProgress.hideProcessDialog();
-				Toast.makeText(_context, arg1.getMessage(),Toast.LENGTH_SHORT).show();
+				Toast.makeText(_context,"下载失败，请在后台确认文件是否存在！",Toast.LENGTH_SHORT).show();
 			}
 			
 			

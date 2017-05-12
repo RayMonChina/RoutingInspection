@@ -27,6 +27,14 @@ public class RworkItemRes {
 	private int alreadyUpload;
 	private int isDownload;
 	private String peiheren;
+	private String usermac;
+	
+	public String getUsermac() {
+		return usermac;
+	}
+	public void setUsermac(String usermac) {
+		this.usermac = usermac;
+	}
 	public String getId() {
 		return id;
 	}

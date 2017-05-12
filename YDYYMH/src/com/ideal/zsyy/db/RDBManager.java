@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.zxing.common.StringUtils;
 import com.ideal.zsyy.entity.RLocalFileMapping;
 import com.ideal.zsyy.entity.RWorkMediaInfo;
 import com.ideal.zsyy.entity.RWorkStepInfo;
@@ -15,6 +16,7 @@ import com.ideal.zsyy.entity.WaterPriceInfo;
 import com.ideal.zsyy.response.RworkItemRes;
 import com.ideal.zsyy.service.PreferencesService;
 import com.ideal.zsyy.utils.DateUtils;
+import com.ideal.zsyy.utils.StringHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -102,6 +104,7 @@ public class RDBManager {
 		cValues.put("recordcount", workItem.getRecordcount());
 		cValues.put("gjdmc", workItem.getGjdmc());
 		cValues.put("peiheren", workItem.getPeiheren());
+		cValues.put("usermac", workItem.getUsermac());
 		db.insert("TB_Works", "id", cValues);
 	}
 
@@ -116,7 +119,6 @@ public class RDBManager {
 			rWorkItem.setTicketnum(cursor.getString(cursor.getColumnIndex("ticketnum")));
 			rWorkItem.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
 			rWorkItem.setCreatetime(cursor.getString(cursor.getColumnIndex("createtime")));
-			rWorkItem.setCreatetime(cursor.getString(cursor.getColumnIndex("addDate")));
 			rWorkItem.setSendperson(cursor.getString(cursor.getColumnIndex("sendperson")));
 			rWorkItem.setCity(cursor.getString(cursor.getColumnIndex("city")));
 			rWorkItem.setCounty(cursor.getString(cursor.getColumnIndex("county")));
@@ -130,6 +132,7 @@ public class RDBManager {
 			rWorkItem.setGjdmc(cursor.getString(cursor.getColumnIndex("gjdmc")));
 			rWorkItem.setRecordcount(cursor.getInt(cursor.getColumnIndex("recordcount")));
 			rWorkItem.setPeiheren(cursor.getString(cursor.getColumnIndex("peiheren")));
+			rWorkItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
 			retList.add(rWorkItem);
 		}
 		return retList;
@@ -175,9 +178,42 @@ public class RDBManager {
 			rWorkItem.setGjdmc(cursor.getString(cursor.getColumnIndex("gjdmc")));
 			rWorkItem.setRecordcount(cursor.getInt(cursor.getColumnIndex("recordcount")));
 			rWorkItem.setPeiheren(cursor.getString(cursor.getColumnIndex("peiheren")));
+			rWorkItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
 			retList.add(rWorkItem);
 		}
 		return retList;
+	}
+	
+	public RworkItemRes getWorkItemByTaskName(String userId,String taskName,String taskNum){
+		RworkItemRes rWorkItem=null;
+		if(StringHelper.isEmpty(userId)||StringHelper.isEmpty(taskName)||StringHelper.isEmpty(taskNum)){
+			return rWorkItem;
+		}
+		String strSql="select * from TB_Works where userid=? and taskname=?";
+		Cursor cursor=db.rawQuery(strSql, new String []{userId,taskName});
+		if(cursor.moveToNext()){
+			rWorkItem = new RworkItemRes();
+			rWorkItem.setId(cursor.getString(cursor.getColumnIndex("id")));
+			rWorkItem.setTicketnum(cursor.getString(cursor.getColumnIndex("ticketnum")));
+			rWorkItem.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
+			rWorkItem.setCreatetime(cursor.getString(cursor.getColumnIndex("createtime")));
+			rWorkItem.setCreatetime(cursor.getString(cursor.getColumnIndex("addDate")));
+			rWorkItem.setSendperson(cursor.getString(cursor.getColumnIndex("sendperson")));
+			rWorkItem.setCity(cursor.getString(cursor.getColumnIndex("city")));
+			rWorkItem.setCounty(cursor.getString(cursor.getColumnIndex("county")));
+			rWorkItem.setUnit(cursor.getString(cursor.getColumnIndex("unit")));
+			rWorkItem.setState(cursor.getString(cursor.getColumnIndex("state")));
+			rWorkItem.setUserid(cursor.getString(cursor.getColumnIndex("userid")));
+			rWorkItem.setTaskname(cursor.getString(cursor.getColumnIndex("taskname")));
+			rWorkItem.setAlreadyUpload(cursor.getInt(cursor.getColumnIndex("alreadyUpload")));
+			rWorkItem.setWorktype(cursor.getString(cursor.getColumnIndex("worktype")));
+			rWorkItem.setVolclass(cursor.getString(cursor.getColumnIndex("volclass")));
+			rWorkItem.setGjdmc(cursor.getString(cursor.getColumnIndex("gjdmc")));
+			rWorkItem.setRecordcount(cursor.getInt(cursor.getColumnIndex("recordcount")));
+			rWorkItem.setPeiheren(cursor.getString(cursor.getColumnIndex("peiheren")));
+			rWorkItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
+		}
+		return rWorkItem;
 	}
 
 	public int unLoadMediaCount(String userId) {
@@ -215,6 +251,7 @@ public class RDBManager {
 			mediaItem.setCreatetime(cursor.getString(cursor.getColumnIndex("createtime")));
 			mediaItem.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
 			mediaItem.setAlreadyUpload(cursor.getInt(cursor.getColumnIndex("alreadyUpload")));
+			mediaItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
 			retList.add(mediaItem);
 		}
 		return retList;
@@ -262,6 +299,7 @@ public class RDBManager {
 			rWorkItem.setGjdmc(cursor.getString(cursor.getColumnIndex("gjdmc")));
 			rWorkItem.setPeiheren(cursor.getString(cursor.getColumnIndex("peiheren")));
 			rWorkItem.setRecordcount(cursor.getInt(cursor.getColumnIndex("recordcount")));
+			rWorkItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
 		}
 
 		return rWorkItem;
@@ -281,7 +319,37 @@ public class RDBManager {
 		cValues.put("ticketnum", workItem.getTicketnum());
 		cValues.put("peiheren", workItem.getPeiheren());
 		cValues.put("remark", workItem.getRemark());
+		cValues.put("usermac", workItem.getUsermac());
 		db.update("TB_Works", cValues, "id=?", new String[] { workItem.getId() });
+	}
+	
+	public void updateWorkInfoByTaskNum(RworkItemRes workItem) {
+		if (workItem == null) {
+			return;
+		}
+		ContentValues cValues = new ContentValues();
+		cValues.put("id", workItem.getId());
+		cValues.put("ticketnum", workItem.getTicketnum());
+		cValues.put("remark", workItem.getRemark());
+		cValues.put("createtime", DateUtils.changeDateFormat(workItem.getCreatetime()));
+		cValues.put("addDate", workItem.getCreatetime());
+		cValues.put("sendperson", workItem.getSendperson());
+		cValues.put("alreadyUpload", 1);
+		cValues.put("city", workItem.getCity());
+		cValues.put("county", workItem.getCounty());
+		cValues.put("unit", workItem.getUnit());
+		cValues.put("state", workItem.getState());
+		cValues.put("userid", workItem.getUserid());
+		cValues.put("taskname", workItem.getTaskname());
+		cValues.put("worktype", workItem.getWorktype());
+		cValues.put("volclass", workItem.getVolclass());
+		cValues.put("isDownLoad", workItem.getIsDownload());
+		cValues.put("gjdmc", workItem.getGjdmc());
+		cValues.put("recordcount", workItem.getRecordcount());
+		cValues.put("gjdmc", workItem.getGjdmc());
+		cValues.put("peiheren", workItem.getPeiheren());
+		cValues.put("usermac", workItem.getUsermac());
+		db.update("TB_Works", cValues, "ticketnum=?", new String[] { workItem.getTicketnum() });
 	}
 
 	// 删除已上传数据
@@ -354,6 +422,7 @@ public class RDBManager {
 		cValues.put("createtime", DateUtils.changeDateFormat(mediaInfo.getCreatetime()));
 		cValues.put("remark", mediaInfo.getRemark());
 		cValues.put("alreadyUpload", mediaInfo.getAlreadyUpload());
+		cValues.put("usermac", mediaInfo.getUsermac());
 		this.db.insert("TB_MediaInfo", "id", cValues);
 		RemoveMediaMapData(mediaInfo.getId());
 		
@@ -382,6 +451,7 @@ public class RDBManager {
 		cValues.put("createtime", DateUtils.changeDateFormat(mediaInfo.getCreatetime()));
 		cValues.put("remark", mediaInfo.getRemark());
 		cValues.put("alreadyUpload", mediaInfo.getAlreadyUpload());
+		cValues.put("usermac", mediaInfo.getUsermac());
 		this.db.update("TB_MediaInfo", cValues, "id=?", new String[] { mediaInfo.getId() });
 	}
 
@@ -409,6 +479,7 @@ public class RDBManager {
 			mediaItem.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
 			mediaItem.setAlreadyUpload(cursor.getInt(cursor.getColumnIndex("alreadyUpload")));
 			mediaItem.setLocalFilePath(cursor.getString(cursor.getColumnIndex("localFilePath")));
+			mediaItem.setUsermac(cursor.getString(cursor.getColumnIndex("usermac")));
 			retList.add(mediaItem);
 		}
 		return retList;
@@ -432,6 +503,7 @@ public class RDBManager {
 		cValues.put("gjdmc", mediaInfo.getGjdmc());
 		cValues.put("remark", mediaInfo.getRemark());
 		cValues.put("alreadyUpload", mediaInfo.getAlreadyUpload());
+		cValues.put("usermac", mediaInfo.getUsermac());
 		this.db.update("TB_MediaInfo", cValues, "id=?", new String[] { mediaInfo.getId() });
 	}
 	//

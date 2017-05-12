@@ -61,6 +61,10 @@ public class StringHelper {
 		}
 		return convert.toUpperCase();
 	}
+	
+	public static boolean isEmpty(String checkValue){
+		return (checkValue==null||checkValue.trim().length()==0);
+	}
 
 	/**
 	 * 得到中文首字母缩写

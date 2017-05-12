@@ -21,6 +21,8 @@ import com.ideal.zsyy.response.RworkItemRes;
 import com.ideal.zsyy.service.PreferencesService;
 import com.ideal.zsyy.utils.DialogCirleProgress;
 import com.ideal.zsyy.utils.HttpUtil;
+import com.ideal.zsyy.utils.StringHelper;
+import com.ideal.zsyy.utils.UtilWifi;
 import com.learnncode.mediachooser.activity.BucketHomeFragmentActivity;
 import com.shenrenkeji.intelcheck.R;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -85,6 +87,8 @@ public class RMediaManageActivity extends Activity {
 	private int uploadCount=0;
 	private RworkItemRes workItem=null;
 	private String remoatIds="";
+	private String macAddress="";
+	UtilWifi uwifi=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -164,6 +168,7 @@ public class RMediaManageActivity extends Activity {
 	
 	private void initData()
 	{
+		uwifi=new UtilWifi(RMediaManageActivity.this);
 		taskNum=getIntent().getStringExtra("taskNum");
 		dbmanager=new RDBManager(RMediaManageActivity.this);
 		workMediaAdapter=new RWorkInfoSelfAdapter(RMediaManageActivity.this,mediaInfos);
@@ -258,6 +263,13 @@ public class RMediaManageActivity extends Activity {
 				workMediaAdapter.notifyDataSetChanged();
 			}
 		}
+	}
+	
+	private String getMacAddress(){
+		if(StringHelper.isEmpty(macAddress)){
+			macAddress=uwifi.getMacAddress();
+		}
+		return macAddress;
 	}
 	
 	//删除
@@ -409,6 +421,7 @@ public class RMediaManageActivity extends Activity {
 			.addParams("gjdmc",mInfo.getGjdmc())
 			.addParams("gpsaddress",mInfo.getGpsaddress())
 			.addParams("id", mInfo.getId())
+			.addParams("usermac", getMacAddress())
 			.addFile("mediafile", fileMedia.getName(),fileMedia).build().execute(new Callback<String>() {
 
 				@Override

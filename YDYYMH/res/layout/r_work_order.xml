@@ -99,7 +99,7 @@
                         android:layout_alignTop="@id/etWorkNum"
                         android:gravity="center"
                         android:paddingLeft="7.0dip"
-                        android:text="编号：" />
+                        android:text="编      号：" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -123,7 +123,7 @@
                         android:layout_alignTop="@id/etworkname"
                         android:gravity="center"
                         android:paddingLeft="7.0dip"
-                        android:text="内容:" />
+                        android:text="工程名称:" />
                 </RelativeLayout>
 
                 <LinearLayout

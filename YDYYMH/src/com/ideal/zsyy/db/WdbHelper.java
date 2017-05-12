@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WdbHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 16;
+	private static final int DATABASE_VERSION = 17;
 	private static String DATABASE_NAME = "r_db";
 	public WdbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,7 +64,8 @@ public class WdbHelper extends SQLiteOpenHelper {
 				 + " recordcount int,"
 				 + "isDownLoad int,"
 				 + "gjdmc nvarchar(100),"
-				 + "peiheren nvarchar(50))";
+				 + "peiheren nvarchar(50),"
+				 + "usermac nvarchar(50))";
 		db.execSQL(strSql);              
 		
 		strSql="CREATE TABLE IF NOT EXISTS TB_MediaInfo"+
@@ -83,7 +84,8 @@ public class WdbHelper extends SQLiteOpenHelper {
 				+ "localpath nvarchar(300),"
 				+ "hasdown int,"
 				+ "islast int,"
-				+ "alreadyUpload int)";
+				+ "alreadyUpload int,"
+				+ "usermac nvarchar(50))";
 		db.execSQL(strSql); 
 		
 		strSql="  CREATE TABLE IF NOT EXISTS TB_LPoint(" +

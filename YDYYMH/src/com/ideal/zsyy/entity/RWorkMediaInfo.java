@@ -19,6 +19,14 @@ public class RWorkMediaInfo {
 	private int islast;
 	private boolean isSelect;
 	private String localFilePath;
+	private String usermac;
+	
+	public String getUsermac() {
+		return usermac;
+	}
+	public void setUsermac(String usermac) {
+		this.usermac = usermac;
+	}
 	public String getId() {
 		return id;
 	}

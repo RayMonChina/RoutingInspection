@@ -21,16 +21,21 @@ import com.ideal.zsyy.entity.RWorkType;
 import com.ideal.zsyy.response.RBaseRes;
 import com.ideal.zsyy.response.RworkItemRes;
 import com.ideal.zsyy.service.PreferencesService;
+import com.ideal.zsyy.utils.DateUtils;
 import com.ideal.zsyy.utils.DialogCirleProgress;
 import com.ideal.zsyy.utils.FileUtils;
 import com.ideal.zsyy.utils.HttpUtil;
 import com.ideal.zsyy.utils.ImageUtils;
+import com.ideal.zsyy.utils.StringHelper;
+import com.ideal.zsyy.utils.UtilWifi;
 import com.shenrenkeji.intelcheck.R;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 import com.zhy.http.okhttp.callback.Callback;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -42,6 +47,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -97,7 +103,12 @@ public class RWorkOrderActivity extends Activity {
 	private SimpleDateFormat simFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private RWorkMediaInfo mediaInfo = null;
 	private TextView tv_btnImgListLook = null;// 影音管理
+	RworkItemRes localWorkItem = null;
+	boolean hasWordExists = false;
 	String taskNum = "";
+	boolean isChecking=false;
+	private String macAddress="";
+	UtilWifi uwifi=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +118,13 @@ public class RWorkOrderActivity extends Activity {
 		preferencesService = new PreferencesService(RWorkOrderActivity.this);
 		this.initData();
 		this.initView();
-		//this.initWokType();
-		//getWorkStep("", "");
+		// this.initWokType();
+		// getWorkStep("", "");
 		this.initControlData();
 	}///
 
 	private void initData() {
+		uwifi=new UtilWifi(RWorkOrderActivity.this);
 		picQulity = new ArrayList<String>();
 		picQulity.add("一般 640");
 		picQulity.add("优 1280");
@@ -123,10 +135,10 @@ public class RWorkOrderActivity extends Activity {
 		if (taskNum != null && !"".equals(taskNum)) {
 			workItemInfo = dbManager.getWorkItemBytaskNum(taskNum);
 		}
-		listWorkType =dbManager.GetWorkTypeList();
-		listDyLevel =dbManager.GetVolClassList();
-		workSteps =dbManager.GetSteps();
-		
+		listWorkType = dbManager.GetWorkTypeList();
+		listDyLevel = dbManager.GetVolClassList();
+		workSteps = dbManager.GetSteps();
+
 		adpWorkTypes = new ArrayAdapter<RWorkType>(RWorkOrderActivity.this, android.R.layout.simple_spinner_item,
 				listWorkType);
 		adpWorkTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,6 +159,9 @@ public class RWorkOrderActivity extends Activity {
 			if (tv_btnImgListLook != null) {
 				tv_btnImgListLook.setText("影音管理(" + workItemInfo.getRecordcount() + ")");
 			}
+			handler.sendEmptyMessage(1);
+			handler.sendEmptyMessage(2);
+			handler.sendEmptyMessage(3);
 		}
 
 	}
@@ -280,13 +295,35 @@ public class RWorkOrderActivity extends Activity {
 		// btn_upload.setVisibility(View.GONE);
 		// }
 		tv_btnImgListLook = (TextView) findViewById(R.id.btnImgListLook);
+		
+		etworkname.setOnFocusChangeListener(focusChangeListener);
 	}
+	
+	private OnFocusChangeListener focusChangeListener=new OnFocusChangeListener() {
+		
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			// TODO Auto-generated method stub
+			if(!hasFocus){
+				//checkTaskName();
+			}
+		}
+	};
 
 	private OnClickListener clickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+//			v.setFocusableInTouchMode(true);
+//			v.setFocusable(true);
+//			v.requestFocus();
+//			if(isChecking)
+//			{
+//				Toast.makeText(RWorkOrderActivity.this, "正在验证数据，请稍候重试",Toast.LENGTH_SHORT).show();
+//				return;
+//			}
+			//String tickName = etworkname.getText().toString();
 			switch (v.getId()) {
 			case R.id.btnNextKey:
 				nextStep();
@@ -295,27 +332,57 @@ public class RWorkOrderActivity extends Activity {
 				// Intent intentVideo = new Intent(RWorkOrderActivity.this,
 				// VideoDemoActivity.class);
 				// startActivityForResult(intentVideo, Video_Request_Code);
-				AudioRecord();
+				//AudioRecord();
+				checkTaskName(R.id.btnVideo);
 				break;
 			case R.id.btnCamera:
-				photo();
+				//photo();
+				checkTaskName(R.id.btnCamera);
 				break;
 			case R.id.btn_upload:
-				uploadWork();
+				//uploadWork();
+				checkTaskName(R.id.btn_upload);
 				break;
 			case R.id.btn_manage:
-				// initWorkData();
+//				// initWorkData();
+//				taskNum = etWorkNum.getText().toString();
+//				Intent intent_media = new Intent(RWorkOrderActivity.this, RMediaManageActivity.class);
+//				intent_media.putExtra("taskNum", taskNum);
+//				startActivityForResult(intent_media, 3);
+				checkTaskName(R.id.btn_manage);
+				break;
+			case R.id.btn_back:
+				finish();
+				break;
+			default:
+				break;
+			}
+		}
+	};
+	
+	private Handler handlerClick=new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case R.id.btnVideo:
+				AudioRecord();//录音
+				break;
+			case R.id.btnCamera:
+				photo();//拍照
+				break;
+			case R.id.btn_upload://上传
+				uploadWork();
+				break;
+			case R.id.btn_manage://选择文件
 				taskNum = etWorkNum.getText().toString();
 				Intent intent_media = new Intent(RWorkOrderActivity.this, RMediaManageActivity.class);
 				intent_media.putExtra("taskNum", taskNum);
 				startActivityForResult(intent_media, 3);
 				break;
-			case R.id.btn_back:
-				finish();
 			default:
 				break;
 			}
-		}
+		};
 	};
 
 	private void nextStep() {
@@ -438,10 +505,15 @@ public class RWorkOrderActivity extends Activity {
 				break;
 			case 7:
 				Toast.makeText(getApplicationContext(), "上传成功！", Toast.LENGTH_SHORT).show();
+				if(StringHelper.isEmpty(workItemInfo.getUnit()))
+				{
+					updateTaskInfo();
+				}
 				// Intent intent_upSuccess=new Intent();
 				// setResult(RESULT_OK, intent_upSuccess);
 				// finish();
 				break;
+				
 			default:
 				break;
 			}
@@ -535,6 +607,7 @@ public class RWorkOrderActivity extends Activity {
 			workItemInfo.setWorktype(workType);
 			workItemInfo.setPeiheren(peiheren);
 			workItemInfo.setGjdmc(step);
+			workItemInfo.setCreatetime(simFormat.format(new Date()));
 			// dbManager.AddWorkItem(workItemInfo);
 			taskNum = ticketnum;
 		} else {
@@ -549,31 +622,49 @@ public class RWorkOrderActivity extends Activity {
 			// dbManager.updateWorkInfo(workItemInfo);
 		}
 	}
+	
+	private String getMacAddress(){
+		if(StringHelper.isEmpty(macAddress)){
+			macAddress=uwifi.getMacAddress();
+		}
+		return macAddress;
+	}
 
 	public void uploadWork()// 上传
 	{
 		initWorkData();
 		if (workItemInfo != null) {
-			if (workItemInfo.getAlreadyUpload() == 0&&dbManager.getWorkItemBytaskNum(workItemInfo.getTicketnum())==null)
+			workItemInfo.setUsermac(getMacAddress());
+			if (workItemInfo.getAlreadyUpload() == 0
+					&& dbManager.getWorkItemBytaskNum(workItemInfo.getTicketnum()) == null)
 				dbManager.AddWorkItem(workItemInfo);
 			else
 				dbManager.updateWorkInfo(workItemInfo);
 		}
-		if (workItemInfo.getTaskname() == null || workItemInfo.getTaskname().trim().equals("")) {
-			Toast.makeText(RWorkOrderActivity.this, "请输入任务内容", Toast.LENGTH_SHORT).show();
+		else {
+			Toast.makeText(RWorkOrderActivity.this, "上传异常", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		if(!HttpUtil.checkNet(RWorkOrderActivity.this))
-		{
+		if (workItemInfo.getTaskname() == null || workItemInfo.getTaskname().trim().equals("")) {
+			Toast.makeText(RWorkOrderActivity.this, "请输入工程名称", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (!HttpUtil.checkNet(RWorkOrderActivity.this)) {
 			Toast.makeText(RWorkOrderActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		final DialogCirleProgress dCirleProgress = new DialogCirleProgress(RWorkOrderActivity.this);
-		OkHttpUtils.post().url(Config.Apiurl + "?action=addtask").addParams("ticketnum", workItemInfo.getTicketnum())
-				.addParams("taskname", workItemInfo.getTaskname()).addParams("userid", workItemInfo.getUserid())
-				.addParams("worktype", workItemInfo.getWorktype()).addParams("volclass", workItemInfo.getVolclass())
-				.addParams("remark", workItemInfo.getRemark()).addParams("peiheren", workItemInfo.getPeiheren()).build()
-				.execute(new Callback<String>() {
+		OkHttpUtils.post().url(Config.Apiurl + "?action=addtask")
+		.addParams("ticketnum", workItemInfo.getTicketnum())
+		.addParams("taskname", workItemInfo.getTaskname())
+		.addParams("userid", workItemInfo.getUserid())
+		.addParams("worktype", workItemInfo.getWorktype())
+		.addParams("volclass", workItemInfo.getVolclass())
+		.addParams("remark", workItemInfo.getRemark())
+		.addParams("peiheren", workItemInfo.getPeiheren())
+		.addParams("usermac", getMacAddress())
+		.build()
+		.execute(new Callback<String>() {
 
 					@Override
 					public void onBefore(Request request, int id) {
@@ -744,6 +835,182 @@ public class RWorkOrderActivity extends Activity {
 		}).start();
 	}
 
+	private void showSelfDialog(final int viewId) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(RWorkOrderActivity.this);
+		builder.setTitle("检测到该任务名称已存在，继续使用该名称将修改原数据信息？");
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				//workItemInfo = localWorkItem;
+				taskNum=localWorkItem.getTicketnum();
+				etWorkNum.setText(taskNum);
+				initWorkData();
+				initControlData();
+				hasWordExists = false;
+				handlerClick.sendEmptyMessage(viewId);
+			}
+		});
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		builder.show();
+	}
+
+	// 查看taskName是否已存在
+	public void checkTaskName(final int viewId) {
+		// dbManager.removeAlreadyData();
+		String userId = preferencesService.getLoginInfo().get("use_id").toString();
+		String taskName = etworkname.getText().toString();
+		taskNum = etWorkNum.getText().toString();
+		if (StringHelper.isEmpty(taskName)) {
+			Toast.makeText(RWorkOrderActivity.this, "请输入工程名称", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		localWorkItem = dbManager.getWorkItemByTaskName(userId, taskName, taskNum);
+		if (localWorkItem != null) {
+			if(!StringHelper.isEmpty(localWorkItem.getTaskname())&&localWorkItem.getTicketnum().equalsIgnoreCase(taskNum)){	
+				handlerClick.sendEmptyMessage(viewId);
+				return;
+			}
+			else{
+				hasWordExists=true;
+				showSelfDialog(viewId);
+				return;
+			}
+			
+		}
+		if (!HttpUtil.checkNet(RWorkOrderActivity.this)) {
+			handlerClick.sendEmptyMessage(viewId);
+			return;
+		}
+		isChecking=true;
+		final DialogCirleProgress dCirleProgress = new DialogCirleProgress(RWorkOrderActivity.this);
+		OkHttpUtils.get().url(Config.Apiurl)
+		.addParams("action", "queryusertask")
+		.addParams("taskname", taskName)
+		.addParams("userid", userId).build().execute(new Callback<List<RworkItemRes>>() {
+
+					@Override
+					public void onBefore(Request request, int id) {
+						// TODO Auto-generated method stub
+						super.onBefore(request, id);
+						Log.i("loginRequest", request.url().toString());
+						dCirleProgress.showProcessDialog();
+					}
+
+					@Override
+					public void onError(Call arg0, Exception arg1, int arg2) {
+						// TODO Auto-generated method stub
+						dCirleProgress.hideProcessDialog();
+						isChecking=false;
+						return;
+					}
+
+					@Override
+					public void onResponse(List<RworkItemRes> arg0, int arg1) {
+						// TODO Auto-generated method stub
+						dCirleProgress.hideProcessDialog();
+						isChecking=false;
+						if (arg0 == null || arg0.size() == 0||arg0.get(0).getTicketnum().equalsIgnoreCase(taskNum)) {
+							hasWordExists = false;
+							handlerClick.sendEmptyMessage(viewId);
+							if(arg0.size()>0)
+								localWorkItem = arg0.get(0);
+							return;
+						}
+						hasWordExists=true;
+						dbManager.AddWorkItems(arg0);
+						localWorkItem = arg0.get(0);
+					}
+
+					@Override
+					public List<RworkItemRes> parseNetworkResponse(Response arg0, int arg1) throws Exception {
+						// TODO Auto-generated method stub
+						String bodyStr = arg0.body().string();
+						Log.i("response", bodyStr);
+						bodyStr = bodyStr.replace("\\", "/");
+						Type tp = new TypeToken<RBaseRes<List<RworkItemRes>>>() {
+						}.getType();
+						RBaseRes<List<RworkItemRes>> baseRes = new Gson().fromJson(bodyStr, tp);
+						String retCode = baseRes.getStatus();
+						if (!"success".equalsIgnoreCase(retCode)) {
+							Log.i("workData faile:", arg0.request().url().toString());
+							throw new Exception("download work data error");
+						}
+						if (baseRes != null && baseRes.getData() != null) {
+							return baseRes.getData();
+						}
+						return null;
+					}
+
+				});
+	}
+	
+		public void updateTaskInfo() {
+			// dbManager.removeAlreadyData();
+			String userId = preferencesService.getLoginInfo().get("use_id").toString();
+			String taskName = etworkname.getText().toString();
+			if (StringHelper.isEmpty(taskName)) {
+				return;
+			}
+			OkHttpUtils.get().url(Config.Apiurl)
+			.addParams("action", "queryusertask")
+			.addParams("taskname", taskName)
+			.addParams("userid", userId).build().execute(new Callback<List<RworkItemRes>>() {
+
+						@Override
+						public void onBefore(Request request, int id) {
+							// TODO Auto-generated method stub
+							super.onBefore(request, id);
+							Log.i("loginRequest", request.url().toString());
+							
+						}
+
+						@Override
+						public void onError(Call arg0, Exception arg1, int arg2) {
+							// TODO Auto-generated method stub
+							return;
+						}
+
+						@Override
+						public void onResponse(List<RworkItemRes> arg0, int arg1) {
+							// TODO Auto-generated method stub
+							if(arg0!=null&&arg0.size()>0)
+							   dbManager.updateWorkInfoByTaskNum(arg0.get(0));
+						}
+
+						@Override
+						public List<RworkItemRes> parseNetworkResponse(Response arg0, int arg1) throws Exception {
+							// TODO Auto-generated method stub
+							String bodyStr = arg0.body().string();
+							Log.i("response", bodyStr);
+							bodyStr = bodyStr.replace("\\", "/");
+							Type tp = new TypeToken<RBaseRes<List<RworkItemRes>>>() {
+							}.getType();
+							RBaseRes<List<RworkItemRes>> baseRes = new Gson().fromJson(bodyStr, tp);
+							String retCode = baseRes.getStatus();
+							if (!"success".equalsIgnoreCase(retCode)) {
+								Log.i("workData faile:", arg0.request().url().toString());
+								throw new Exception("download work data error");
+							}
+							if (baseRes != null && baseRes.getData() != null) {
+								return baseRes.getData();
+							}
+							return null;
+						}
+
+					});
+		}
+
 	private void uploadFile(String fileName, String fileType) {
 		if (workItemInfo == null) {
 			initWorkData();
@@ -790,6 +1057,7 @@ public class RWorkOrderActivity extends Activity {
 		mediaInfo.setPicpath(fileName);
 		mediaInfo.setPickind(fileType);
 		mediaInfo.setLocalFilePath(fileName);
+		mediaInfo.setUsermac(getMacAddress());
 		dbManager.addMediaInfo(mediaInfo);
 		OkHttpUtils.post().url(Config.Apiurl + "?action=addscene")
 				.addParams("ticketnum", etWorkNum.getText().toString())
@@ -800,7 +1068,9 @@ public class RWorkOrderActivity extends Activity {
 				.addParams("gjdmc", str_step)
 				.addParams("gpsaddress", bdLocation.getAddrStr())
 				.addParams("id", mediaInfo.getId())
-				.addFile("mediafile", file.getName(), file).build().execute(new Callback<String>() {
+				.addParams("usermac", getMacAddress())
+				.addFile("mediafile", file.getName(), file).build()
+				.execute(new Callback<String>() {
 
 					@Override
 					public void onBefore(Request request, int id) {
@@ -814,7 +1084,8 @@ public class RWorkOrderActivity extends Activity {
 					public void onError(Call arg0, Exception arg1, int arg2) {
 						// TODO Auto-generated method stub
 						// dCirleProgress.hideProcessDialog();
-						//Toast.makeText(RWorkOrderActivity.this, "上传失败," + arg1.getMessage(), Toast.LENGTH_SHORT).show();
+						// Toast.makeText(RWorkOrderActivity.this, "上传失败," +
+						// arg1.getMessage(), Toast.LENGTH_SHORT).show();
 						workItemInfo.setRecordcount(workItemInfo.getRecordcount() + 1);
 						dbManager.updateWorkInfo(workItemInfo);
 						handler.sendEmptyMessage(6);
@@ -826,9 +1097,16 @@ public class RWorkOrderActivity extends Activity {
 						// dCirleProgress.hideProcessDialog();
 						mediaInfo.setAlreadyUpload(1);
 						workItemInfo.setRecordcount(workItemInfo.getRecordcount() + 1);
-						dbManager.updateMediaInfo(mediaInfo);
-						dbManager.updateWorkInfo(workItemInfo);
-						handler.sendEmptyMessage(6);
+						try{
+							dbManager.updateMediaInfo(mediaInfo);
+							dbManager.updateWorkInfo(workItemInfo);
+							handler.sendEmptyMessage(6);
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+							Log.e("更新數據錯誤", e.getMessage());
+						}
+						
 					}
 
 					@Override

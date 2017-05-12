@@ -77,6 +77,7 @@ public class RWorkItemAdapter extends BaseAdapter{
 			 TextView btn_delete=(TextView)layout.findViewById(R.id.btn_delete);//删除
 			 TextView tv_content=(TextView)layout.findViewById(R.id.tv_content);//内容
 			 TextView tv_record_count=(TextView)layout.findViewById(R.id.tv_record_count);
+			 TextView tv_equipment=(TextView)layout.findViewById(R.id.tv_equipment);
 			viewHolder = new ViewHolder();
 			viewHolder.setTv_username(tv_username);
 			viewHolder.setTv_addDate(tv_date);
@@ -85,6 +86,7 @@ public class RWorkItemAdapter extends BaseAdapter{
 			viewHolder.setBtn_delete(btn_delete);
 			viewHolder.setTv_record_count(tv_record_count);
 			viewHolder.setTv_content(tv_content);
+			viewHolder.setTv_equipment(tv_equipment);
 			convertView = layout;
 			convertView.setTag(viewHolder);
 		}
@@ -95,6 +97,7 @@ public class RWorkItemAdapter extends BaseAdapter{
 		viewHolder.getTv_unit().setText(workItem.getUnit());
 		viewHolder.getTv_record_count().setText("共"+workItem.getRecordcount()+"条记录");
 		viewHolder.getTv_content().setText(StringHelper.subString(workItem.getTaskname(), 15));
+		viewHolder.getTv_equipment().setText(workItem.getUsermac());
 		if(_userId!=null&&_userId.equals(workItem.getUserid())&&workItem.getAlreadyUpload()==0)
 		{
 			viewHolder.getBtn_delete().setVisibility(View.VISIBLE);
@@ -138,6 +141,14 @@ public class RWorkItemAdapter extends BaseAdapter{
 		private TextView btn_delete;
 		private TextView tv_record_count;
 		private TextView tv_content;
+		private TextView tv_equipment;
+		
+		public TextView getTv_equipment() {
+			return tv_equipment;
+		}
+		public void setTv_equipment(TextView tv_equipment) {
+			this.tv_equipment = tv_equipment;
+		}
 		public TextView getTv_username() {
 			return tv_username;
 		}
