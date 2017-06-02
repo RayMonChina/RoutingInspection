@@ -15,47 +15,47 @@ public final class R {
 		public static final int tabs_title_color = 0x7f060002;
 	}
 	public static final class drawable {
-		public static final int ic_camera_selected_from_media_chooser_header_bar = 0x7f0200c1;
-		public static final int ic_camera_unselect_from_media_chooser_header_bar = 0x7f0200c2;
-		public static final int ic_launcher = 0x7f0200c3;
-		public static final int ic_loading = 0x7f0200c4;
-		public static final int ic_navigation_left_from_media_chooser_header_bar = 0x7f0200c5;
-		public static final int ic_selected_check_box_from_media_chooser_header_bar = 0x7f0200c6;
-		public static final int ic_unselected_check_box_from_media_chooser_header_bar = 0x7f0200c7;
-		public static final int ic_video = 0x7f0200c8;
-		public static final int ic_video_selected_from_media_chooser_header_bar = 0x7f0200c9;
-		public static final int ic_video_unselect_from_media_chooser_header_bar = 0x7f0200ca;
-		public static final int selector_camera_button = 0x7f0201d1;
-		public static final int selector_check = 0x7f0201d2;
-		public static final int selector_video_button = 0x7f0201ea;
-		public static final int tab_selected = 0x7f02021e;
-		public static final int tab_selector = 0x7f02021f;
-		public static final int tab_unselected = 0x7f020220;
+		public static final int ic_camera_selected_from_media_chooser_header_bar = 0x7f0200c0;
+		public static final int ic_camera_unselect_from_media_chooser_header_bar = 0x7f0200c1;
+		public static final int ic_launcher = 0x7f0200c2;
+		public static final int ic_loading = 0x7f0200c3;
+		public static final int ic_navigation_left_from_media_chooser_header_bar = 0x7f0200c4;
+		public static final int ic_selected_check_box_from_media_chooser_header_bar = 0x7f0200c5;
+		public static final int ic_unselected_check_box_from_media_chooser_header_bar = 0x7f0200c6;
+		public static final int ic_video = 0x7f0200c7;
+		public static final int ic_video_selected_from_media_chooser_header_bar = 0x7f0200c8;
+		public static final int ic_video_unselect_from_media_chooser_header_bar = 0x7f0200c9;
+		public static final int selector_camera_button = 0x7f0201ba;
+		public static final int selector_check = 0x7f0201bb;
+		public static final int selector_video_button = 0x7f0201cf;
+		public static final int tab_selected = 0x7f020202;
+		public static final int tab_selector = 0x7f020203;
+		public static final int tab_unselected = 0x7f020204;
 	}
 	public static final class id {
-		public static final int backArrowImageViewFromMediaChooserHeaderView = 0x7f090199;
-		public static final int checkTextViewFromMediaChooserGridItemRowView = 0x7f090196;
-		public static final int gridViewFromMediaChooser = 0x7f090197;
-		public static final int imageViewFromMediaChooserBucketRowView = 0x7f090193;
-		public static final int imageViewFromMediaChooserGridItemRowView = 0x7f090195;
-		public static final int lv_audio = 0x7f09019b;
+		public static final int backArrowImageViewFromMediaChooserHeaderView = 0x7f090186;
+		public static final int checkTextViewFromMediaChooserGridItemRowView = 0x7f090183;
+		public static final int gridViewFromMediaChooser = 0x7f090184;
+		public static final int imageViewFromMediaChooserBucketRowView = 0x7f090180;
+		public static final int imageViewFromMediaChooserGridItemRowView = 0x7f090182;
+		public static final int lv_audio = 0x7f090188;
 		public static final int meadiaChooserHeaderBar = 0x7f090005;
-		public static final int nameTextViewFromMediaChooserBucketRowView = 0x7f090194;
-		public static final int postToActionBarFromMediaChooser = 0x7f090198;
+		public static final int nameTextViewFromMediaChooserBucketRowView = 0x7f090181;
+		public static final int postToActionBarFromMediaChooser = 0x7f090185;
 		public static final int realTabcontent = 0x7f090006;
-		public static final int titleTextViewFromMediaChooserHeaderBar = 0x7f09019a;
-		public static final int tv_audio_name = 0x7f09019c;
-		public static final int tv_date = 0x7f09019d;
+		public static final int titleTextViewFromMediaChooserHeaderBar = 0x7f090187;
+		public static final int tv_audio_name = 0x7f090189;
+		public static final int tv_date = 0x7f09018a;
 	}
 	public static final class layout {
 		public static final int activity_home_media_chooser = 0x7f030000;
-		public static final int view_grid_bucket_item_media_chooser = 0x7f03006d;
-		public static final int view_grid_item_media_chooser = 0x7f03006e;
-		public static final int view_grid_layout_media_chooser = 0x7f03006f;
-		public static final int view_header_bar_media_chooser = 0x7f030070;
-		public static final int view_list_layout_audio_chooser = 0x7f030071;
-		public static final int view_listview_item_audio_chooser = 0x7f030072;
-		public static final int view_loading_media_chooser = 0x7f030073;
+		public static final int view_grid_bucket_item_media_chooser = 0x7f03006b;
+		public static final int view_grid_item_media_chooser = 0x7f03006c;
+		public static final int view_grid_layout_media_chooser = 0x7f03006d;
+		public static final int view_header_bar_media_chooser = 0x7f03006e;
+		public static final int view_list_layout_audio_chooser = 0x7f03006f;
+		public static final int view_listview_item_audio_chooser = 0x7f030070;
+		public static final int view_loading_media_chooser = 0x7f030071;
 	}
 	public static final class string {
 		public static final int app_name = 0x7f070000;
